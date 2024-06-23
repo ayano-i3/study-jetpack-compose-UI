@@ -44,9 +44,11 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            weather?.let {
-                Text(text = "City: ${it.name}, Temperature: ${it.main.temp} °C")
-            } ?: Text(text = "Loading...")
+            val displayText = weather?.let {
+                "City: ${it.name}, Temperature: ${it.main.temp} °C"
+            } ?: "Loading..."
+
+            Text(text = displayText)
         }
     }
 
