@@ -100,5 +100,6 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     // secrets-gradle-plugin
     implementation("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1")
-
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
 }

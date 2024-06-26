@@ -41,7 +41,8 @@ private val LightColorScheme = lightColorScheme(
 fun StudyjetpackcomposeTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    // エミュレータと色を合わせるためにfalse
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

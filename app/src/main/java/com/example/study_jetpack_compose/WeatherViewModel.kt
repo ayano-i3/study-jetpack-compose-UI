@@ -8,9 +8,11 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
 class WeatherViewModel(private val repository: WeatherRepository) : ViewModel() {
-    private val _weather = MutableLiveData<WeatherResponse>()
-    val weather: LiveData<WeatherResponse>
-        get() = _weather
+    private val _weatherData = MutableLiveData<WeatherResponse>()
+    val weatherData: LiveData<WeatherResponse>
+        get() = _weatherData
+
+    private val apiKey = BuildConfig.MAPS_API_KEY
 
     fun fetchWeather(cityName: String) {
         viewModelScope.launch {
@@ -18,11 +20,11 @@ class WeatherViewModel(private val repository: WeatherRepository) : ViewModel() 
 //            val main = Main(25.0f)
 //            val response = WeatherResponse(main, "Tokyo")
 //            _weather.postValue(response)
-            val apiKey = BuildConfig.MAPS_API_KEY
+
             try {
                 val response = repository.getWeather(cityName, apiKey)
                 // 非同期に値を更新する
-                _weather.postValue(response)
+                _weatherData.postValue(response)
             } catch (e: Exception) {
                 // Handle error
                 Log.e("WeatherViewModel", "fetchWeather: $e")
