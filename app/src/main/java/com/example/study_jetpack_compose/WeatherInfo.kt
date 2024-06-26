@@ -56,7 +56,7 @@ fun WeatherInfoScreen(weatherResponse: WeatherResponse) {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = weatherResponse.weather[0].description,
+                    text = translateWeatherDescription(weatherResponse.weather[0].description),
                     style = MaterialTheme.typography.titleMedium
                 )
             }
@@ -81,39 +81,67 @@ fun WeatherInfoScreen(weatherResponse: WeatherResponse) {
 }
 
 @Composable
-fun HourlyWeatherSession(hourlyWeatherList: List<HourlyWeather>) {
+fun HourlyWeatherSession(weatherResponse: List<WeatherResponse>) {
     Column {
         Text(
             text = "1時間ごとの天気予報",
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(16.dp)
         )
 
         LazyRow(modifier = Modifier.padding(16.dp)) {
-            items(hourlyWeatherList) { hourlyWeather ->
-                WeatherItem(hourlyWeather)
+            items(weatherResponse) { weatherResponse ->
+                WeatherItem(weatherResponse)
             }
         }
     }
 }
 
 @Composable
-fun WeatherItem(hourlyWeather: HourlyWeather) {
+fun WeatherItem(weatherResponse: WeatherResponse) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(8.dp)
     ) {
         Text(
-            text = "${String.format("%.0f", hourlyWeather.temp)}°C",
+            text = "${String.format("%.0f", weatherResponse.main.temp)}°C",
             style = MaterialTheme.typography.bodyMedium
         )
+        val iconUrl =
+            "https://openweathermap.org/img/wn/${weatherResponse.weather[0].icon}@2x.png"
         Image(
-            painter = rememberAsyncImagePainter("http://openweathermap.org/img/wn/${hourlyWeather.icon}.png"),
-            contentDescription = hourlyWeather.description,
-            modifier = Modifier.size(40.dp)
+            painter = rememberAsyncImagePainter(iconUrl),
+            contentDescription = weatherResponse.weather[0].description,
+            modifier = Modifier.size(56.dp)
+        )
+        Text(
+            text = translateWeatherDescription(weatherResponse.weather[0].description),
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Text(
+            text = "降水確率: ${weatherResponse.pop}%",
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.padding(top = 8.dp)
         )
     }
 }
+val weatherDescriptionMap = mapOf(
+    "clear sky" to "晴れ",
+    "few clouds" to "少し曇り",
+    "scattered clouds" to "曇り",
+    "broken clouds" to "曇り",
+    "shower rain" to "にわか雨",
+    "rain" to "雨",
+    "thunderstorm" to "雷雨",
+    "snow" to "雪",
+    "mist" to "霧",
+    "moderate rain" to "小雨"
+)
+
+fun translateWeatherDescription(description: String): String {
+    return weatherDescriptionMap[description] ?: description
+}
+
 
 @Preview(showBackground = true)
 @Composable
@@ -129,24 +157,6 @@ fun WeatherInfoScreenPreview() {
             "01d",
             "clear sky",
             "2021-09-01 12:00:00"
-        )
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HourlyWeatherSessionPreview() {
-    HourlyWeatherSession(
-        listOf(
-            HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00"),
-            HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00"),
-            HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00"),
-            HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00"),
-            HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00"),
-            HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00"),
-            HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00"),
-            HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00"),
-            HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00"),
         )
     )
 }

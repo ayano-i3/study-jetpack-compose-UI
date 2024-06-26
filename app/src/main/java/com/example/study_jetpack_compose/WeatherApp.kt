@@ -64,6 +64,7 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
 
     currentWeather?.let { weatherResponse ->
         WeatherInfoScreen(weatherResponse = weatherResponse)
+        HourlyWeatherSession(weatherResponse = listOf(weatherResponse))
     }
 
     LaunchedEffect(Unit) {
@@ -105,7 +106,6 @@ fun SearchBar(
 
         colors = TextFieldDefaults.outlinedTextFieldColors()
     )
-
 }
 
 @Preview(showBackground = true)
