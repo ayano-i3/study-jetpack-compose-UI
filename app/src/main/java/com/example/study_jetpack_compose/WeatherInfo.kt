@@ -126,6 +126,10 @@ fun WeatherItem(weatherResponse: WeatherResponse) {
             text = "最低気温: ${String.format("%.0f", weatherResponse.main.tempMax)}°C",
             style = MaterialTheme.typography.bodySmall
         )
+        Text(
+            text = "湿気: ${weatherResponse.main.humidity}%",
+            style = MaterialTheme.typography.bodySmall
+        )
     }
 }
 val weatherDescriptionMap = mapOf(
@@ -151,7 +155,8 @@ fun translateWeatherDescription(description: String): String {
 fun WeatherInfoScreenPreview() {
     WeatherInfoScreen(
         WeatherResponse(
-            Main(25.0f, 25.0f, 25.0f, 25.0f),
+            Main(25.0f,
+            0, 25.0f, 25.0f, 25.0f),
             listOf(Weather("Clear", "clear sky", "01d", 0, 25.0f, "2021-09-01 12:00:00")),
             "Tokyo",
               listOf(HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00")),
