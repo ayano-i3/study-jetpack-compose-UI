@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -17,7 +16,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -43,9 +41,6 @@ fun WeatherApp(viewModel: WeatherViewModel) {
     Scaffold(
         // スクロールの挙動を設定
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-//        topBar = {
-//            WeatherTopAppBar(scrollBehavior = scrollBehavior)
-//        },
         content = { paddingValues ->
             Box(
                 modifier = Modifier.padding(paddingValues)
@@ -53,7 +48,7 @@ fun WeatherApp(viewModel: WeatherViewModel) {
                 Column {
                     SearchBar(
                         modifier = Modifier.padding(8.dp),
-                        onSearch = { query -> viewModel.fetchWeather(query)}
+                        onSearch = { query -> viewModel.fetchWeather(query) }
                     )
                     WeatherScreen(viewModel)
                 }
@@ -62,64 +57,18 @@ fun WeatherApp(viewModel: WeatherViewModel) {
     )
 
 }
+
 @Composable
 fun WeatherScreen(viewModel: WeatherViewModel) {
     val currentWeather by viewModel.currentWeatherData.observeAsState()
-//    val hourlyWeather by viewModel.hourlyWeatherData.observeAsState()
-    val dailyWeather by viewModel.dailyWeatherData.observeAsState()
 
-//    Column(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(16.dp)
-//                .verticalScroll(rememberScrollState())
-//    ) {
-
-        currentWeather?.let { weatherResponse ->
-            WeatherInfoScreen(weatherResponse = weatherResponse)
-        }
-//        hourlyWeather?.let { hourlyWeather ->
-//            HourlyWeatherSession(hourlyWeather)
-//        }
-//        dailyWeather?.let { dailyWeatherList ->
-//            dailyWeatherList.forEach { dailyWeather ->
-//                DailyWeatherItem(dailyWeather)
-//            }
-//        }
-//            ?: run {
-//                Box(
-//                    modifier = Modifier.fillMaxSize(),
-//                    contentAlignment = Alignment.Center
-//                ) {
-//                    Text("Loading...", style = MaterialTheme.typography.bodyLarge)
-//                }
-//
-//            }
-//    }
-
+    currentWeather?.let { weatherResponse ->
+        WeatherInfoScreen(weatherResponse = weatherResponse)
+    }
 
     LaunchedEffect(Unit) {
         viewModel.fetchWeather("Tokyo")
-//        viewModel.fetchDailyWeather("Tokyo")
     }
-}
-
-@Composable
-fun WeatherTopAppBar(
-    scrollBehavior: TopAppBarScrollBehavior,
-    modifier: Modifier = Modifier
-) {
-    CenterAlignedTopAppBar(
-        scrollBehavior = scrollBehavior,
-        title = {
-            Text(
-                text = "Weather App",
-                style = MaterialTheme.typography.headlineSmall,
-            )
-        },
-        modifier = modifier
-    )
-
 }
 
 @Composable
@@ -127,12 +76,12 @@ fun SearchBar(
     modifier: Modifier = Modifier,
     onSearch: (String) -> Unit
 ) {
-    var searchText by remember { mutableStateOf("")}
+    var searchText by remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     OutlinedTextField(
         value = searchText,
-        onValueChange = { newText -> searchText = newText},
+        onValueChange = { newText -> searchText = newText },
         modifier = modifier
             .padding(8.dp)
             .fillMaxWidth(),
@@ -158,33 +107,6 @@ fun SearchBar(
     )
 
 }
-
-//@Composable
-//fun HourlyForecastSection(hourlyWeather: List<Weather>) {
-//    Column(
-//        modifier = Modifier.padding(vertical = 16.dp)
-//    ) {
-//        Text(text = "1時間ごとの天気予報", style = MaterialTheme.typography.titleSmall)
-//        LazyRow {
-//            items(hourlyWeather) { weather ->
-//                Column(
-//                    horizontalAlignment = Alignment.CenterHorizontally,
-//                    modifier = Modifier.padding(8.dp)
-//                ) {
-//                    Text(text = "${weather.temp}", style = MaterialTheme.typography.bodyMedium)
-//                    Text(text = "${weather.pop}", style = MaterialTheme.typography.bodyMedium)
-//                    val iconUrl = "https://openweathermap.org/img/wn/${weather.icon}@2x.png"
-//                    Icon(
-//                        painter = rememberAsyncImagePainter(iconUrl),
-//                        contentDescription = "Cloudy",
-//                        modifier = Modifier.size(32.dp)
-//                    )
-//                    Text(text = "${weather}:00", style = MaterialTheme.typography.bodyMedium)
-//                }
-//            }
-//        }
-//    }
-//}
 
 @Preview(showBackground = true)
 @Composable

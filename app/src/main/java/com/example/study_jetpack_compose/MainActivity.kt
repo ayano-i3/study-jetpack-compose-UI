@@ -26,8 +26,6 @@ class MainActivity : ComponentActivity() {
             WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
         setDecorFitsSystemWindows(window, false)
         WindowInsetsControllerCompat(window, window.decorView).let { controller ->
-//            controller.hide(WindowInsetsCompat.Type.statusBars()) // ステータスバーを隠す
-//            controller.hide(WindowInsetsCompat.Type.navigationBars()) // ナビゲーションバーを隠す
             controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
         }
         setContent {

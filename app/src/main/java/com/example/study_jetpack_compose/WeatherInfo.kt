@@ -112,8 +112,6 @@ fun WeatherItem(hourlyWeather: HourlyWeather) {
             contentDescription = hourlyWeather.description,
             modifier = Modifier.size(40.dp)
         )
-//        Text(text = "${hourlyWeather.pop}%", style = MaterialTheme.typography.bodyMedium)
-//        Text(text = hourlyWeather.time, style = MaterialTheme.typography.bodyMedium)
     }
 }
 
