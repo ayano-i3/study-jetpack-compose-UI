@@ -6,13 +6,14 @@ data class WeatherResponse(
     val main: Main,
     val weather: List<Weather>,
     val name: String,
-    val hourlyWeather: List<HourlyWeather>,
+    @SerializedName("hourly") val hourlyWeather: List<HourlyWeather>,
     val temp: Float,
     val pop: Int, // 降水確率
     val icon: String,
     val description: String,
-    val time: String
+    val time: String,
 )
+
 
 data class Main(
     val temp: Float,
@@ -29,6 +30,23 @@ data class Weather(
     val temp: Float,
     val time: String
 )
+
+data class DailyForecastResponse(
+    val daily: List<DailyWeather>
+)
+
+data class DailyWeather(
+    val dt: Long,
+    val temp: Temp,
+    val weather: List<Weather>,
+    val pop: Float
+)
+data class Temp(
+    val day: Float,
+    val min: Float,
+    val max: Float
+)
+
 
 data class HourlyWeather(
     val temp: Float,

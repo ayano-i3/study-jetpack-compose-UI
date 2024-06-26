@@ -81,7 +81,7 @@ fun WeatherInfoScreen(weatherResponse: WeatherResponse) {
 }
 
 @Composable
-fun TenDayForecastSection(hourlyWeatherList: List<HourlyWeather>) {
+fun HourlyWeatherSession(hourlyWeatherList: List<HourlyWeather>) {
     Column {
         Text(
             text = "1時間ごとの天気予報",
@@ -107,7 +107,13 @@ fun WeatherItem(hourlyWeather: HourlyWeather) {
             text = "${String.format("%.0f", hourlyWeather.temp)}°C",
             style = MaterialTheme.typography.bodyMedium
         )
-        Text(text = "${hourlyWeather.pop}%", style = MaterialTheme.typography.bodyMedium)
+        Image(
+            painter = rememberAsyncImagePainter("http://openweathermap.org/img/wn/${hourlyWeather.icon}.png"),
+            contentDescription = hourlyWeather.description,
+            modifier = Modifier.size(40.dp)
+        )
+//        Text(text = "${hourlyWeather.pop}%", style = MaterialTheme.typography.bodyMedium)
+//        Text(text = hourlyWeather.time, style = MaterialTheme.typography.bodyMedium)
     }
 }
 
@@ -125,6 +131,24 @@ fun WeatherInfoScreenPreview() {
             "01d",
             "clear sky",
             "2021-09-01 12:00:00"
+        )
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HourlyWeatherSessionPreview() {
+    HourlyWeatherSession(
+        listOf(
+            HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00"),
+            HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00"),
+            HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00"),
+            HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00"),
+            HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00"),
+            HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00"),
+            HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00"),
+            HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00"),
+            HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00"),
         )
     )
 }

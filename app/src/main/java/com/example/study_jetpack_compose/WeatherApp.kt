@@ -4,7 +4,6 @@ package com.example.study_jetpack_compose
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
@@ -26,7 +25,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -66,35 +64,43 @@ fun WeatherApp(viewModel: WeatherViewModel) {
 }
 @Composable
 fun WeatherScreen(viewModel: WeatherViewModel) {
-    val weather by viewModel.weatherData.observeAsState()
+    val currentWeather by viewModel.currentWeatherData.observeAsState()
+//    val hourlyWeather by viewModel.hourlyWeatherData.observeAsState()
+    val dailyWeather by viewModel.dailyWeatherData.observeAsState()
 
-    weather?.let { weatherResponse ->
-        Column(
+//    Column(
 //            modifier = Modifier
 //                .fillMaxSize()
 //                .padding(16.dp)
 //                .verticalScroll(rememberScrollState())
-        ) {
-//            LocationBar(location = weatherResponse.name)
+//    ) {
+
+        currentWeather?.let { weatherResponse ->
             WeatherInfoScreen(weatherResponse = weatherResponse)
-
-            // 1時間ごとの天気予報
-//            HourlyForecastSection(hourlyWeather = weatherResponse.weather)
-
-//            DailyForecastSection()
         }
-    } ?: run {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("Loading...", style = MaterialTheme.typography.bodyLarge)
-        }
-    }
+//        hourlyWeather?.let { hourlyWeather ->
+//            HourlyWeatherSession(hourlyWeather)
+//        }
+//        dailyWeather?.let { dailyWeatherList ->
+//            dailyWeatherList.forEach { dailyWeather ->
+//                DailyWeatherItem(dailyWeather)
+//            }
+//        }
+//            ?: run {
+//                Box(
+//                    modifier = Modifier.fillMaxSize(),
+//                    contentAlignment = Alignment.Center
+//                ) {
+//                    Text("Loading...", style = MaterialTheme.typography.bodyLarge)
+//                }
+//
+//            }
+//    }
 
 
     LaunchedEffect(Unit) {
         viewModel.fetchWeather("Tokyo")
+//        viewModel.fetchDailyWeather("Tokyo")
     }
 }
 
