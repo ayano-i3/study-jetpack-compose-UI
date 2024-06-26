@@ -119,9 +119,12 @@ fun WeatherItem(weatherResponse: WeatherResponse) {
             style = MaterialTheme.typography.bodyMedium
         )
         Text(
-            text = "降水確率: ${weatherResponse.pop}%",
-            style = MaterialTheme.typography.bodySmall,
-            modifier = Modifier.padding(top = 8.dp)
+            text = "最高気温: ${String.format("%.0f", weatherResponse.main.tempMin)}°C",
+            style = MaterialTheme.typography.bodySmall
+        )
+        Text(
+            text = "最低気温: ${String.format("%.0f", weatherResponse.main.tempMax)}°C",
+            style = MaterialTheme.typography.bodySmall
         )
     }
 }
@@ -151,9 +154,8 @@ fun WeatherInfoScreenPreview() {
             Main(25.0f, 25.0f, 25.0f, 25.0f),
             listOf(Weather("Clear", "clear sky", "01d", 0, 25.0f, "2021-09-01 12:00:00")),
             "Tokyo",
-            listOf(HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00")),
+              listOf(HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00")),
             25.0f,
-            0,
             "01d",
             "clear sky",
             "2021-09-01 12:00:00"

@@ -8,7 +8,6 @@ data class WeatherResponse(
     val name: String,
     @SerializedName("hourly") val hourlyWeather: List<HourlyWeather>,
     val temp: Float,
-    val pop: Int, // 降水確率
     val icon: String,
     val description: String,
     val time: String,
