@@ -3,6 +3,7 @@ package com.example.study_jetpack_compose
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -30,6 +31,7 @@ fun TenDayWeatherForecast(dailyWeatherList: List<DailyWeatherData>) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
+                .fillMaxHeight()
                 .padding(16.dp)
         ) {
             items(dailyWeatherList) { dailyWeatherData ->

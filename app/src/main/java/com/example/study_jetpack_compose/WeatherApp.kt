@@ -16,7 +16,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -26,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -38,12 +36,8 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeatherApp(viewModel: WeatherViewModel) {
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-
 
     Scaffold(
-        // スクロールの挙動を設定
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         content = { paddingValues ->
             Box(
                 modifier = Modifier.padding(paddingValues)
@@ -68,18 +62,18 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
     val currentWeather by viewModel.currentWeatherData.observeAsState()
 //    val cityName by remember { mutableStateOf("Tokyo") }
 
-        // 現在の天気情報を表示
-        currentWeather?.let { weatherResponse ->
-            WeatherInfoScreen(weatherResponse = weatherResponse)
-        } ?: run {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("Loading...", style = MaterialTheme.typography.bodyLarge)
-            }
-
+    // 現在の天気情報を表示
+    currentWeather?.let { weatherResponse ->
+        WeatherInfoScreen(weatherResponse = weatherResponse)
+    } ?: run {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("Loading...", style = MaterialTheme.typography.bodyLarge)
         }
+
+    }
 
     HourlyWeatherSession(
         weatherList = weatherList
