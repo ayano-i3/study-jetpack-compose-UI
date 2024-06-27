@@ -54,13 +54,11 @@ fun WeatherApp(viewModel: WeatherViewModel) {
             }
         }
     )
-
 }
 
 @Composable
 fun WeatherScreen(viewModel: WeatherViewModel) {
     val currentWeather by viewModel.currentWeatherData.observeAsState()
-//    val cityName by remember { mutableStateOf("Tokyo") }
 
     // 現在の天気情報を表示
     currentWeather?.let { weatherResponse ->

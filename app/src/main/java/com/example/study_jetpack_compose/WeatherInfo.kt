@@ -1,7 +1,9 @@
 package com.example.study_jetpack_compose
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,11 +14,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,78 +28,100 @@ import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun WeatherInfoScreen(weatherResponse: WeatherResponse) {
-    Column(
-        horizontalAlignment = Alignment.Start,
-        modifier = Modifier.padding(16.dp)
+    Box(
+        modifier = Modifier
+            .padding(12.dp)
+            .background(
+                color = Color.Blue.copy(alpha = 0.1f),
+                shape = RoundedCornerShape(16.dp)
+            )
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
+        Column(
+            horizontalAlignment = Alignment.Start,
+            modifier = Modifier.padding(16.dp)
         ) {
-            Column(
-                horizontalAlignment = Alignment.Start,
-                modifier = Modifier.padding(horizontal = 8.dp)
-            ) {
-                Text(text = "現在の天気", style = MaterialTheme.typography.titleLarge)
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "${String.format("%.0f", weatherResponse.main.temp)}°C",
-                    style = MaterialTheme.typography.headlineMedium
-                )
-            }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier.weight(1f)
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                val iconUrl =
-                    "https://openweathermap.org/img/wn/${weatherResponse.weather[0].icon}@2x.png"
-                Image(
-                    painter = rememberAsyncImagePainter(iconUrl),
-                    contentDescription = weatherResponse.weather[0].description,
-                    modifier = Modifier.size(64.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                ) {
+                    Text(text = "現在の天気", style = MaterialTheme.typography.titleLarge)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "${String.format("%.0f", weatherResponse.main.temp)}°C",
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    val iconUrl =
+                        "https://openweathermap.org/img/wn/${weatherResponse.weather[0].icon}@2x.png"
+                    Image(
+                        painter = rememberAsyncImagePainter(iconUrl),
+                        contentDescription = weatherResponse.weather[0].description,
+                        modifier = Modifier.size(64.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = translateWeatherDescription(weatherResponse.weather[0].description),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Text(
-                    text = translateWeatherDescription(weatherResponse.weather[0].description),
-                    style = MaterialTheme.typography.titleMedium
+                    text = "最高気温: ${
+                        String.format(
+                            "%.0f",
+                            weatherResponse.main.tempMin
+                        )
+                    }°C・最低気温: ${String.format("%.0f", weatherResponse.main.tempMax)}°C",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = "体感温度: ${String.format("%.0f", weatherResponse.main.feelsLike)}°C",
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = "最高気温: ${String.format("%.0f", weatherResponse.main.tempMin)}°C・最低気温: ${String.format("%.0f", weatherResponse.main.tempMax)}°C",
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Text(
-                text = "体感温度: ${String.format("%.0f", weatherResponse.main.feelsLike)}°C",
-                style = MaterialTheme.typography.bodyLarge
-            )
         }
     }
 }
 
 @Composable
 fun HourlyWeatherSession(weatherList: List<HourlyWeatherData>) {
-    Column {
-        Text(
-            text = "1時間ごとの天気予報",
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(16.dp)
-        )
+  
+        Column {
+            Text(
+                text = "1時間ごとの天気予報",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(16.dp)
+            )
 
-        LazyRow(modifier = Modifier.padding(8.dp)) {
-            items(weatherList) { hourlyWeatherData ->
-                WeatherItem(hourlyWeatherData = hourlyWeatherData)
+            LazyRow(
+                modifier = Modifier.padding(8.dp)
+                    .background(
+                        color = Color.Blue.copy(alpha = 0.1f),
+                        shape = RoundedCornerShape(16.dp)
+                    )
+            ) {
+                items(weatherList) { hourlyWeatherData ->
+                    WeatherItem(hourlyWeatherData = hourlyWeatherData)
+                }
             }
         }
-    }
+
 }
 
 @Composable
