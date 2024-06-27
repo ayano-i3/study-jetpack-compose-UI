@@ -24,12 +24,10 @@ import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun WeatherInfoScreen(weatherResponse: WeatherResponse) {
-
     Column(
         horizontalAlignment = Alignment.Start,
         modifier = Modifier.padding(16.dp)
     ) {
-
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -71,7 +69,6 @@ fun WeatherInfoScreen(weatherResponse: WeatherResponse) {
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-
             Text(
                 text = "最高気温: ${String.format("%.0f", weatherResponse.main.tempMin)}°C・最低気温: ${String.format("%.0f", weatherResponse.main.tempMax)}°C",
                 style = MaterialTheme.typography.bodyMedium
