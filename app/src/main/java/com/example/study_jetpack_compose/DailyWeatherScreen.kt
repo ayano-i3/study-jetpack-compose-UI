@@ -1,53 +1,62 @@
 package com.example.study_jetpack_compose
 
-//@Composable
-//fun DailyWeatherScreen(viewModel: WeatherViewModel) {
-//    val dailyWeather by viewModel.dailyWeatherData.observeAsState()
-//
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(16.dp)
-//            .verticalScroll(rememberScrollState())
-//    ) {
-//        // style　大きいかも
-//        Text(text = "10日間天気予報", style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(16.dp))
-//
-//        dailyWeather?.let { dailyWeatherList ->
-//            dailyWeatherList.forEach { dailyWeather ->
-//                DailyWeatherItem(dailyWeather)
-//            }
-//        } ?: run {
-//            Box(
-//                modifier = Modifier.fillMaxSize(),
-//                contentAlignment = Alignment.Center
-//            ) {
-//                Text("Loading...", style = MaterialTheme.typography.bodyLarge)
-//            }
-//        }
-//    }
-//
-//    LaunchedEffect(Unit) {
-//        viewModel.fetchWeather("Tokyo")
-//        viewModel.fetchDailyWeather("Tokyo")
-//    }
-//}
-//
-//@Composable
-//fun DailyWeatherItem(dailyWeather: DailyWeather) {
-//    val date = remember { SimpleDateFormat("MM/dd", Locale.getDefault()).format(Date(dailyWeather.dt * 1000)) }
-//    Row(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(vertical = 8.dp, horizontal = 16.dp)
-//    ) {
-//        Text(text = date, modifier = Modifier.weight(1f))
-//        Text(text = "${String.format("%.0f", dailyWeather.pop * 100)}%", modifier = Modifier.weight(1f))
-//        Image(
-//            painter = rememberAsyncImagePainter("http://openweathermap.org/img/wn/${dailyWeather.weather[0].icon}.png"),
-//            contentDescription = dailyWeather.weather[0].description,
-//            modifier = Modifier.size(40.dp).weight(1f)
-//        )
-//        Text(text = "${String.format("%.0f", dailyWeather.temp.max)}°/${String.format("%.0f", dailyWeather.temp.min)}°", modifier = Modifier.weight(1f))
-//    }
-//}
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+
+
+@Composable
+fun TenDayWeatherForecast(dailyWeatherList: List<DailyWeatherData>) {
+    Column(
+        modifier = Modifier.fillMaxSize() // 親コンテナが画面全体を埋める
+    ) {
+        Text(
+            text = "10日間の天気予報",
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(16.dp)
+        )
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize() // LazyColumnが画面全体を埋める
+                .padding(16.dp)
+        ) {
+            items(dailyWeatherList) { dailyWeatherData ->
+                DailyWeatherItem(dailyWeatherData = dailyWeatherData)
+            }
+        }
+    }
+}
+@Composable
+fun DailyWeatherItem(dailyWeatherData: DailyWeatherData) {
+    Row(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(text = dailyWeatherData.day, style = MaterialTheme.typography.bodyMedium)
+        Text(text = dailyWeatherData.precipitation, style = MaterialTheme.typography.bodyMedium)
+        Image(
+            painter = painterResource(id = dailyWeatherData.iconResId),
+            contentDescription = null,
+            modifier = Modifier.size(24.dp)
+        )
+        Text(text = dailyWeatherData.temperatureHigh, style = MaterialTheme.typography.bodyMedium)
+        Text(text = dailyWeatherData.temperatureLow, style = MaterialTheme.typography.bodyMedium)
+    }
+}

@@ -4,6 +4,7 @@ package com.example.study_jetpack_compose
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
@@ -23,6 +24,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -38,6 +40,7 @@ import androidx.compose.ui.unit.sp
 fun WeatherApp(viewModel: WeatherViewModel) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
+
     Scaffold(
         // スクロールの挙動を設定
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -48,7 +51,9 @@ fun WeatherApp(viewModel: WeatherViewModel) {
                 Column {
                     SearchBar(
                         modifier = Modifier.padding(8.dp),
-                        onSearch = { query -> viewModel.fetchWeather(query) }
+                        onSearch = { cityName ->
+                            viewModel.fetchWeather(cityName)
+                        }
                     )
                     WeatherScreen(viewModel)
                 }
@@ -61,14 +66,31 @@ fun WeatherApp(viewModel: WeatherViewModel) {
 @Composable
 fun WeatherScreen(viewModel: WeatherViewModel) {
     val currentWeather by viewModel.currentWeatherData.observeAsState()
+//    val cityName by remember { mutableStateOf("Tokyo") }
 
-    currentWeather?.let { weatherResponse ->
-        WeatherInfoScreen(weatherResponse = weatherResponse)
-        HourlyWeatherSession(weatherResponse = listOf(weatherResponse))
-    }
+        // 現在の天気情報を表示
+        currentWeather?.let { weatherResponse ->
+            WeatherInfoScreen(weatherResponse = weatherResponse)
+        } ?: run {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Loading...", style = MaterialTheme.typography.bodyLarge)
+            }
 
+        }
+
+    HourlyWeatherSession(
+        weatherList = weatherList
+    )
+    TenDayWeatherForecast(
+        dailyWeatherList = dailyWeatherList
+    )
+
+    // 初期表示の天気情報を取得
     LaunchedEffect(Unit) {
-        viewModel.fetchWeather("Tokyo")
+        viewModel.fetchWeather("東京")
     }
 }
 

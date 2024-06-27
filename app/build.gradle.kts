@@ -102,4 +102,7 @@ dependencies {
     implementation("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1")
     // Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
+    // Accompanist
+    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.24.13-rc")
+
 }

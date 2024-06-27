@@ -17,16 +17,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun WeatherInfoScreen(weatherResponse: WeatherResponse) {
+
     Column(
         horizontalAlignment = Alignment.Start,
         modifier = Modifier.padding(16.dp)
     ) {
+
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -34,9 +37,10 @@ fun WeatherInfoScreen(weatherResponse: WeatherResponse) {
         ) {
             Column(
                 horizontalAlignment = Alignment.Start,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 8.dp)
             ) {
                 Text(text = "現在の天気", style = MaterialTheme.typography.titleLarge)
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = "${String.format("%.0f", weatherResponse.main.temp)}°C",
                     style = MaterialTheme.typography.headlineMedium
@@ -81,89 +85,73 @@ fun WeatherInfoScreen(weatherResponse: WeatherResponse) {
 }
 
 @Composable
-fun HourlyWeatherSession(weatherResponse: List<WeatherResponse>) {
+fun HourlyWeatherSession(weatherList: List<HourlyWeatherData>) {
     Column {
         Text(
             text = "1時間ごとの天気予報",
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(16.dp)
         )
 
-        LazyRow(modifier = Modifier.padding(16.dp)) {
-            items(weatherResponse) { weatherResponse ->
-                WeatherItem(weatherResponse)
+        LazyRow(modifier = Modifier.padding(8.dp)) {
+            items(weatherList) { hourlyWeatherData ->
+                WeatherItem(hourlyWeatherData = hourlyWeatherData)
             }
         }
     }
 }
 
 @Composable
-fun WeatherItem(weatherResponse: WeatherResponse) {
+fun WeatherItem(hourlyWeatherData: HourlyWeatherData) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier
+            .padding(8.dp)
+            .width(50.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "${String.format("%.0f", weatherResponse.main.temp)}°C",
-            style = MaterialTheme.typography.bodyMedium
-        )
-        val iconUrl =
-            "https://openweathermap.org/img/wn/${weatherResponse.weather[0].icon}@2x.png"
+        Text(text = hourlyWeatherData.temperature, style = MaterialTheme.typography.bodyMedium)
         Image(
-            painter = rememberAsyncImagePainter(iconUrl),
-            contentDescription = weatherResponse.weather[0].description,
-            modifier = Modifier.size(56.dp)
+            painter = painterResource(id = hourlyWeatherData.iconResId),
+            contentDescription = null
         )
-        Text(
-            text = translateWeatherDescription(weatherResponse.weather[0].description),
-            style = MaterialTheme.typography.bodyMedium
-        )
-        Text(
-            text = "最高気温: ${String.format("%.0f", weatherResponse.main.tempMin)}°C",
-            style = MaterialTheme.typography.bodySmall
-        )
-        Text(
-            text = "最低気温: ${String.format("%.0f", weatherResponse.main.tempMax)}°C",
-            style = MaterialTheme.typography.bodySmall
-        )
-        Text(
-            text = "湿気: ${weatherResponse.main.humidity}%",
-            style = MaterialTheme.typography.bodySmall
-        )
+        Text(text = hourlyWeatherData.weather, style = MaterialTheme.typography.bodyMedium)
+        Text(text = hourlyWeatherData.precipitation, style = MaterialTheme.typography.bodySmall)
+        Text(text = hourlyWeatherData.time, style = MaterialTheme.typography.bodySmall)
     }
 }
-val weatherDescriptionMap = mapOf(
-    "clear sky" to "晴れ",
-    "few clouds" to "少し曇り",
-    "scattered clouds" to "曇り",
-    "broken clouds" to "曇り",
-    "shower rain" to "にわか雨",
-    "rain" to "雨",
-    "thunderstorm" to "雷雨",
-    "snow" to "雪",
-    "mist" to "霧",
-    "moderate rain" to "小雨"
-)
 
-fun translateWeatherDescription(description: String): String {
-    return weatherDescriptionMap[description] ?: description
-}
+    val weatherDescriptionMap = mapOf(
+        "clear sky" to "晴れ",
+        "few clouds" to "少し曇り",
+        "scattered clouds" to "曇り",
+        "broken clouds" to "曇り",
+        "shower rain" to "にわか雨",
+        "rain" to "雨",
+        "thunderstorm" to "雷雨",
+        "snow" to "雪",
+        "mist" to "霧",
+        "moderate rain" to "小雨",
+        "overcast clouds" to "雨雲"
+    )
+
+    fun translateWeatherDescription(description: String): String {
+        return weatherDescriptionMap[description] ?: description
+    }
+
 
 
 @Preview(showBackground = true)
 @Composable
 fun WeatherInfoScreenPreview() {
     WeatherInfoScreen(
-        WeatherResponse(
-            Main(25.0f,
-            0, 25.0f, 25.0f, 25.0f),
-            listOf(Weather("Clear", "clear sky", "01d", 0, 25.0f, "2021-09-01 12:00:00")),
-            "Tokyo",
-              listOf(HourlyWeather(25.0f, 0, "01d", "clear sky", "2021-09-01 12:00:00")),
-            25.0f,
-            "01d",
-            "clear sky",
-            "2021-09-01 12:00:00"
-        )
+        weatherResponse = WeatherResponse(
+            main = Main(25f, 50, 25f, 25f, 25f),
+            weather = listOf(Weather("clear sky", "晴れ", "01d", 0, 25f, "現在")),
+            name = "東京",
+            temp = 25f,
+            icon = "01d",
+            description = "晴れ",
+            time = "現在"
+        ),
     )
 }
